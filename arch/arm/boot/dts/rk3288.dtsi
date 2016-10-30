@@ -80,7 +80,11 @@
 			     <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
+#if 0
 		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
+#else
+		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>;
+#endif
 	};
 
 	cpus {
@@ -125,12 +129,14 @@
 			reg = <0x502>;
 			resets = <&cru SRST_CORE2>;
 		};
+#if 0
 		cpu3: cpu@503 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a12";
 			reg = <0x503>;
 			resets = <&cru SRST_CORE3>;
 		};
+#endif
 	};
 
 	amba {
