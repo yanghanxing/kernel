@@ -201,6 +201,10 @@
 		dma-unusable@fe000000 {
 			reg = <0xfe000000 0x1000000>;
 		};
+
+        uboot@50000000 {
+			reg = <0x50000000 0x10000000>;
+		};
 	};
 
 	xin24m: oscillator {
