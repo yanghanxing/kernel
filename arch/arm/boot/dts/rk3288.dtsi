@@ -1145,6 +1145,12 @@
 		};
 	};
 
+    uboot {
+		compatible = "rockchip,uboot";
+		clocks = <&cru PCLK_TIMER>, <&cru SCLK_UART1>, <&cru PCLK_UART1>;
+		clock-names = "pclk_timer","uart1_sclk", "uart1_pclk";
+	};
+
 	pinctrl: pinctrl {
 		compatible = "rockchip,rk3288-pinctrl";
 		rockchip,grf = <&grf>;
