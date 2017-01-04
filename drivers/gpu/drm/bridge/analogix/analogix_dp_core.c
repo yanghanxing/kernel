@@ -1100,7 +1100,7 @@ static void analogix_dp_bridge_disable(struct drm_bridge *bridge)
 		}
 	}
 
-	disable_irq(dp->irq);
+	disable_irq_nosync(dp->irq);
 	phy_power_off(dp->phy);
 
 	if (dp->plat_data->power_off)
