@@ -419,6 +419,10 @@
 	status = "okay";
 };
 
+&vpu {
+	status = "okay";
+};
+
 &pinctrl {
 	ir {
 		ir_int: ir-int {
@@ -514,8 +518,4 @@
 			rockchip,pins = <0 12 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
-};
-
-&pwm1 {
-	status = "okay";
 };
