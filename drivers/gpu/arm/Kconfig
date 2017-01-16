@@ -1,5 +1,5 @@
 #
-# (C) COPYRIGHT 2012 ARM Limited. All rights reserved.
+# (C) COPYRIGHT 2017 Rockchip Electric Co., LTD. All rights reserved.
 #
 # This program is free software and is provided to you under the terms of the
 # GNU General Public License version 2 as published by the Free Software
@@ -11,9 +11,18 @@
 # Boston, MA  02110-1301, USA.
 #
 #
+#
+source "drivers/gpu/arm/mali400/mali/Kconfig"
 
+choice
+	prompt "Mali Midgard driver"
 
+config MALI_MIDGARD_FOR_LINUX
+	bool "Mali Midgard for Linux only"
 
-menu "ARM GPU Configuration"
+config MALI_MIDGARD_FOR_ANDROID
+	bool "Mali Midgard for Android"
+
+endchoice
+
 source "drivers/gpu/arm/midgard/Kconfig"
-endmenu
