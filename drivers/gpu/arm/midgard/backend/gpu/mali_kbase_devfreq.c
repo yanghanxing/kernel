@@ -50,7 +50,6 @@
 #define MAX_CLUSTERS	2
 
 static struct cpumask allowed_cpus[MAX_CLUSTERS];
-static unsigned int cpu_max_freq[MAX_CLUSTERS] = {UINT_MAX, UINT_MAX};
 static unsigned int cpu_clipped_freq[MAX_CLUSTERS] = {UINT_MAX, UINT_MAX};
 
 static int
@@ -241,7 +240,7 @@ static int kbase_devfreq_trans_notifier(struct notifier_block *nb,
 	if (val == DEVFREQ_PRECHANGE &&
 	    new_rate >= kbdev->gpu_limit_freq) {
 		for (i = 0; i < MAX_CLUSTERS; i++) {
-			if (cpu_max_freq[i] > kbdev->cpu_limit_freq) {
+			if (cpu_clipped_freq[i] > kbdev->cpu_limit_freq) {
 				/* change policy->max right now */
 				cpu_clipped_freq[i] = kbdev->cpu_limit_freq;
 				if (cpumask_empty(&allowed_cpus[i]))
@@ -251,15 +250,12 @@ static int kbase_devfreq_trans_notifier(struct notifier_block *nb,
 				if (cpu >= nr_cpu_ids)
 					goto out;
 				cpufreq_update_policy(cpu);
-			} else {
-				/* avoid someone changing policy->max */
-				cpu_clipped_freq[i] = kbdev->cpu_limit_freq;
 			}
 		}
 	} else if (val == DEVFREQ_POSTCHANGE &&
 		   new_rate < kbdev->gpu_limit_freq) {
 		for (i = 0; i < MAX_CLUSTERS; i++) {
-			if (cpu_clipped_freq[i] != UINT_MAX) {
+			if (cpu_clipped_freq[i] <= kbdev->cpu_limit_freq) {
 				/* recover  policy->max  right now */
 				cpu_clipped_freq[i] = UINT_MAX;
 				if (cpumask_empty(&allowed_cpus[i]))
@@ -433,8 +429,7 @@ static int kbase_cpufreq_policy_notifier(struct notifier_block *nb,
 	if (policy->max > cpu_clipped_freq[i])
 		cpufreq_verify_within_limits(policy, 0, cpu_clipped_freq[i]);
 
-	cpu_max_freq[i] = policy->max;
-	pr_debug("cluster%d max=%u, gpu limit=%u\n", i, cpu_max_freq[i],
+	pr_debug("cluster%d max=%u, gpu limit=%u\n", i, policy->max,
 		 cpu_clipped_freq[i]);
 
 out:
